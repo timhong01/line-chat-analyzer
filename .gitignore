@@ -1,0 +1,11 @@
+# Local chat exports and test data
+*.txt
+*.csv
+*.xlsx
+*.xls
+
+# Local environment files
+.DS_Store
+.env
+.env.*
+node_modules/

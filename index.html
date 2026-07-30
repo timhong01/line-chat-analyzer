@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LINE 聊天記錄篩選器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">LINE CHAT VIEWER</p>
+        <h1>聊天記錄篩選器</h1>
+        <p class="subtitle">匯入 LINE 匯出的文字檔，依人物、日期與時間快速整理對話。</p>
+      </div>
+      <label class="import-button" for="file-input">
+        <span>匯入聊天記錄</span>
+        <small>支援 .txt</small>
+      </label>
+      <input id="file-input" type="file" accept=".txt,text/plain">
+    </header>
+
+    <section id="drop-zone" class="drop-zone" aria-label="聊天記錄匯入區">
+      <div class="drop-icon" aria-hidden="true">↥</div>
+      <div>
+        <strong>將 LINE 聊天記錄拖到這裡</strong>
+        <span>或點選右上方「匯入聊天記錄」</span>
+      </div>
+    </section>
+
+    <div id="workspace" class="workspace" hidden>
+      <aside class="filters" aria-label="篩選條件">
+        <div class="filter-heading">
+          <div>
+            <p class="eyebrow">FILTERS</p>
+            <h2>篩選條件</h2>
+          </div>
+          <button id="reset-filters" class="text-button" type="button">全部重設</button>
+        </div>
+
+        <fieldset>
+          <legend>人物</legend>
+          <div id="people-filters" class="people-filters"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>日期區間</legend>
+          <div class="field-grid">
+            <label>開始日期<input id="date-from" type="date"></label>
+            <label>結束日期<input id="date-to" type="date"></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>每日時間區間</legend>
+          <div class="field-grid">
+            <label>開始時間<input id="time-from" type="time" value="00:00"></label>
+            <label>結束時間<input id="time-to" type="time" value="23:59"></label>
+          </div>
+          <p class="field-note">時間條件會套用到日期區間內的每一天。</p>
+        </fieldset>
+      </aside>
+
+      <section class="results" aria-live="polite">
+        <div class="results-header">
+          <div>
+            <p id="file-name" class="file-name"></p>
+            <h2 id="result-count">0 則對話</h2>
+          </div>
+          <div class="results-actions">
+            <p id="result-range" class="result-range"></p>
+            <button id="download-text" class="download-button" type="button">
+              <span aria-hidden="true">↓</span>下載篩選結果 TXT
+            </button>
+          </div>
+        </div>
+        <section class="timeline-chart" aria-labelledby="timeline-title">
+          <div class="chart-heading">
+            <div>
+              <h3 id="timeline-title">每日對話趨勢</h3>
+              <p id="chart-summary">依人物堆疊顯示</p>
+            </div>
+            <div class="metric-switch" role="group" aria-label="圖表統計方式">
+              <button type="button" data-metric="messages" aria-pressed="true">訊息量</button>
+              <button type="button" data-metric="characters" aria-pressed="false">字數</button>
+            </div>
+          </div>
+          <div id="chart-legend" class="chart-legend" aria-label="人物圖例"></div>
+          <div class="chart-scroll">
+            <svg id="timeline-svg" class="timeline-svg" role="img" aria-label="每日訊息量堆疊直條圖"></svg>
+          </div>
+          <p class="chart-note">字數統計不含空白與換行。圖表會套用目前的人物、日期與每日時間條件。</p>
+        </section>
+        <div id="message-list" class="message-list"></div>
+        <div id="empty-state" class="empty-state" hidden>
+          <span>沒有符合條件的對話</span>
+          <button id="empty-reset" class="secondary-button" type="button">清除篩選條件</button>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="parser.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
