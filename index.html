@@ -97,13 +97,13 @@
             <p id="result-range" class="result-range"></p>
             <div class="results-buttons">
               <button id="open-chatgpt" class="chatgpt-button" type="button">
-                <span aria-hidden="true">↗</span>複製內容＋開啟 ChatGPT
+                <span aria-hidden="true">↗</span>準備給 ChatGPT
               </button>
               <button id="download-text" class="download-button" type="button">
                 <span aria-hidden="true">↓</span>下載篩選結果 TXT
               </button>
             </div>
-            <p id="ai-status" class="ai-status" aria-live="polite">資料只會先複製，不會自動傳送。</p>
+            <p id="ai-status" class="ai-status" aria-live="polite">先確認內容，再複製並開啟 ChatGPT。</p>
           </div>
         </div>
         <section class="timeline-chart" aria-labelledby="timeline-title">
@@ -131,6 +131,28 @@
       </section>
     </div>
   </main>
+
+  <dialog id="chatgpt-dialog" class="share-dialog" aria-labelledby="chatgpt-dialog-title">
+    <form method="dialog" class="share-dialog-content">
+      <div class="share-dialog-heading">
+        <div>
+          <p class="eyebrow">CHATGPT</p>
+          <h2 id="chatgpt-dialog-title">複製篩選內容</h2>
+        </div>
+        <button class="dialog-close" type="submit" value="cancel" aria-label="關閉">×</button>
+      </div>
+      <p class="share-dialog-description">先複製下方內容，再開啟 ChatGPT 並按 Command + V 貼上。</p>
+      <label for="chatgpt-prompt">準備傳送的文字</label>
+      <textarea id="chatgpt-prompt" readonly></textarea>
+      <p id="chatgpt-copy-status" class="copy-status" aria-live="polite"></p>
+      <div class="share-dialog-actions">
+        <button id="copy-chatgpt-text" class="download-button" type="button">複製內容</button>
+        <a class="chatgpt-link" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">開啟 ChatGPT ↗</a>
+        <button class="secondary-button" type="submit" value="cancel">關閉</button>
+      </div>
+    </form>
+  </dialog>
+
   <script src="parser.js"></script>
   <script src="app.js"></script>
 </body>

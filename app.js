@@ -18,6 +18,10 @@
     downloadText: document.getElementById("download-text"),
     openChatGPT: document.getElementById("open-chatgpt"),
     aiStatus: document.getElementById("ai-status"),
+    chatGPTDialog: document.getElementById("chatgpt-dialog"),
+    chatGPTPrompt: document.getElementById("chatgpt-prompt"),
+    chatGPTCopyStatus: document.getElementById("chatgpt-copy-status"),
+    copyChatGPTText: document.getElementById("copy-chatgpt-text"),
     chartSummary: document.getElementById("chart-summary"),
     chartLegend: document.getElementById("chart-legend"),
     timelineSvg: document.getElementById("timeline-svg"),
@@ -121,7 +125,7 @@
     elements.downloadText.disabled = filtered.length === 0;
     elements.openChatGPT.disabled = filtered.length === 0;
     elements.aiStatus.textContent = filtered.length
-      ? "資料只會先複製，不會自動傳送。"
+      ? "先確認內容，再複製並開啟 ChatGPT。"
       : "沒有可複製的篩選結果。";
     renderTimelineChart(filtered);
 
@@ -254,46 +258,44 @@
     URL.revokeObjectURL(url);
   }
 
-  function copyTextFallback(text) {
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.setAttribute("readonly", "");
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-    document.body.appendChild(textarea);
-    textarea.select();
-    const copied = document.execCommand("copy");
-    textarea.remove();
-    if (!copied) throw new Error("copy failed");
+  function selectPreparedPrompt() {
+    elements.chatGPTPrompt.focus();
+    elements.chatGPTPrompt.select();
+    elements.chatGPTPrompt.setSelectionRange(0, elements.chatGPTPrompt.value.length);
   }
 
-  async function copyText(text) {
+  async function copyPreparedPrompt() {
+    const text = elements.chatGPTPrompt.value;
+    selectPreparedPrompt();
     if (navigator.clipboard && window.isSecureContext) {
       try {
         await navigator.clipboard.writeText(text);
-        return;
+        elements.chatGPTCopyStatus.textContent = "已複製。請開啟 ChatGPT 並按 Command + V。";
+        return true;
       } catch (_error) {
-        copyTextFallback(text);
-        return;
+        // Continue with the visible textarea fallback.
       }
     }
-    copyTextFallback(text);
+
+    const copied = document.execCommand("copy");
+    elements.chatGPTCopyStatus.textContent = copied
+      ? "已複製。請開啟 ChatGPT 並按 Command + V。"
+      : "瀏覽器阻擋自動複製。文字已全選，請按 Command + C。";
+    return copied;
   }
 
-  async function copyAndOpenChatGPT() {
+  function prepareChatGPTShare() {
     const filtered = getFilteredMessages();
     if (!filtered.length) return;
 
-    const prompt = window.LineChatParser.formatChatGPTPrompt(filtered);
-    const copyOperation = copyText(prompt);
-    window.open("https://chatgpt.com/", "_blank", "noopener,noreferrer");
-
-    try {
-      await copyOperation;
-      elements.aiStatus.textContent = `已複製 ${filtered.length.toLocaleString("zh-TW")} 則訊息，請在 ChatGPT 貼上。`;
-    } catch (_error) {
-      elements.aiStatus.textContent = "無法自動複製，請改用下載 TXT 後手動上傳。";
+    elements.chatGPTPrompt.value = window.LineChatParser.formatChatGPTPrompt(filtered);
+    elements.chatGPTCopyStatus.textContent = `已準備 ${filtered.length.toLocaleString("zh-TW")} 則訊息。`;
+    if (typeof elements.chatGPTDialog.showModal === "function") {
+      elements.chatGPTDialog.showModal();
+    } else {
+      elements.chatGPTDialog.setAttribute("open", "");
     }
+    selectPreparedPrompt();
   }
 
   function resetFilters() {
@@ -326,7 +328,8 @@
   elements.resetFilters.addEventListener("click", resetFilters);
   elements.emptyReset.addEventListener("click", resetFilters);
   elements.downloadText.addEventListener("click", downloadFilteredText);
-  elements.openChatGPT.addEventListener("click", copyAndOpenChatGPT);
+  elements.openChatGPT.addEventListener("click", prepareChatGPTShare);
+  elements.copyChatGPTText.addEventListener("click", copyPreparedPrompt);
   elements.metricButtons.forEach((button) => button.addEventListener("click", () => {
     state.metric = button.dataset.metric;
     elements.metricButtons.forEach((option) => option.setAttribute("aria-pressed", String(option === button)));
