@@ -12,6 +12,7 @@ GitHub Pages 啟用後網址：[https://timhong01.github.io/line-chat-analyzer/]
 - 每日開始與結束時間
 - 篩選分類可獨立收折，人物清單支援滾動
 - 將目前篩選結果下載為 UTF-8 `.txt` 檔
+- 將目前篩選結果與分析提示複製到剪貼簿，並開啟 ChatGPT
 - 依日期查看人物堆疊直條圖，可切換訊息量與字數
 
 ## 隱私保護
@@ -21,3 +22,4 @@ GitHub Pages 啟用後網址：[https://timhong01.github.io/line-chat-analyzer/]
 - 程式不使用 `localStorage`、遠端資料庫或分析追蹤服務。
 - 重整或關閉頁面後，匯入內容與篩選狀態即清除。
 - 下載的篩選結果只會儲存在使用者指定的本機位置。
+- 「複製內容＋開啟 ChatGPT」只會開啟網站並複製內容；使用者貼上並送出後，資料才會傳送給 ChatGPT。

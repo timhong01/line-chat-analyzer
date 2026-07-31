@@ -97,12 +97,17 @@ input:focus-visible, button:focus-visible, label[for]:focus-within { outline: 3p
 .file-name { margin-bottom: 6px; color: var(--green); font-size: 12px; font-weight: 700; }
 .result-range { margin: 3px 0 0; color: var(--muted); font-size: 13px; text-align: right; }
 .results-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 11px; }
+.results-buttons { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.chatgpt-button,
 .download-button {
   display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border: 0;
   border-radius: 9px; background: var(--green); color: white; font-size: 13px; font-weight: 700;
 }
+.chatgpt-button { border: 1px solid var(--green); background: var(--card); color: var(--green-dark); }
+.chatgpt-button:hover { background: var(--green-soft); }
 .download-button:hover { background: var(--green-dark); }
-.download-button:disabled { cursor: not-allowed; opacity: .45; }
+.chatgpt-button:disabled, .download-button:disabled { cursor: not-allowed; opacity: .45; }
+.ai-status { margin: 0; color: var(--muted); font-size: 11px; text-align: right; }
 .timeline-chart { padding: 24px 28px 18px; border-bottom: 1px solid var(--line); }
 .chart-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
 .chart-heading h3 { margin: 0 0 5px; font-size: 16px; }
@@ -155,7 +160,9 @@ input:focus-visible, button:focus-visible, label[for]:focus-within { outline: 3p
   .results-header { flex-direction: column; }
   .result-range { text-align: left; }
   .results-actions { width: 100%; align-items: flex-start; }
-  .download-button { width: 100%; justify-content: center; }
+  .results-buttons { width: 100%; }
+  .chatgpt-button, .download-button { width: 100%; justify-content: center; }
+  .ai-status { text-align: left; }
   .timeline-chart { padding-left: 20px; padding-right: 20px; }
   .chart-heading { flex-direction: column; }
   .message-list { padding-left: 20px; padding-right: 20px; }

@@ -121,7 +121,21 @@
     return `${lines.join("\n")}\n`;
   }
 
-  const api = { parseLineChat, formatLineChat };
+  function formatChatGPTPrompt(messages) {
+    return `請分析以下 LINE 對話，並以繁體中文回答：
+
+1. 摘要主要議題與結論
+2. 列出待辦事項、負責人與時間
+3. 找出尚未獲得回覆的問題
+4. 整理重要決策與風險
+
+篩選結果共 ${messages.length} 則訊息。
+
+--- 對話開始 ---
+${formatLineChat(messages)}--- 對話結束 ---`;
+  }
+
+  const api = { parseLineChat, formatLineChat, formatChatGPTPrompt };
   root.LineChatParser = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);

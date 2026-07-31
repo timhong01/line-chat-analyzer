@@ -95,9 +95,15 @@
           </div>
           <div class="results-actions">
             <p id="result-range" class="result-range"></p>
-            <button id="download-text" class="download-button" type="button">
-              <span aria-hidden="true">↓</span>下載篩選結果 TXT
-            </button>
+            <div class="results-buttons">
+              <button id="open-chatgpt" class="chatgpt-button" type="button">
+                <span aria-hidden="true">↗</span>複製內容＋開啟 ChatGPT
+              </button>
+              <button id="download-text" class="download-button" type="button">
+                <span aria-hidden="true">↓</span>下載篩選結果 TXT
+              </button>
+            </div>
+            <p id="ai-status" class="ai-status" aria-live="polite">資料只會先複製，不會自動傳送。</p>
           </div>
         </div>
         <section class="timeline-chart" aria-labelledby="timeline-title">
