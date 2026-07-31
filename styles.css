@@ -64,14 +64,18 @@ h2 { margin-bottom: 0; font-size: 20px; }
 .drop-icon { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: var(--green); color: white; font-size: 28px; }
 .workspace { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 28px; align-items: start; }
 .filters, .results { background: var(--card); border: 1px solid rgba(220, 227, 223, .8); border-radius: 18px; box-shadow: var(--shadow); }
-.filters { position: sticky; top: 24px; padding: 24px; }
+.filters { position: sticky; top: 24px; max-height: calc(100vh - 48px); padding: 24px; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
 .filter-heading, .results-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .filter-heading { padding-bottom: 22px; border-bottom: 1px solid var(--line); }
 .text-button { padding: 4px 0; border: 0; background: none; color: var(--green); font-size: 13px; font-weight: 700; }
-fieldset { margin: 0; padding: 22px 0; border: 0; border-bottom: 1px solid var(--line); }
-fieldset:last-child { padding-bottom: 0; border-bottom: 0; }
-legend { padding: 0; margin-bottom: 14px; font-size: 13px; font-weight: 700; }
-.people-filters { display: grid; gap: 7px; }
+.filter-section { border-bottom: 1px solid var(--line); }
+.filter-section:last-child { border-bottom: 0; }
+.filter-section summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0; list-style: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+.filter-section summary::-webkit-details-marker { display: none; }
+.filter-section summary::after { content: "⌄"; color: var(--muted); font-size: 16px; transition: transform .18s; }
+.filter-section[open] summary::after { transform: rotate(180deg); }
+.filter-content { padding: 0 0 20px; }
+.people-filters { display: grid; gap: 7px; max-height: 224px; padding-right: 6px; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
 .person-option { display: grid; grid-template-columns: 18px 9px minmax(0, 1fr) auto; align-items: center; gap: 9px; min-height: 34px; }
 .person-option input { width: 16px; height: 16px; accent-color: var(--green); }
 .person-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
@@ -139,7 +143,7 @@ input:focus-visible, button:focus-visible, label[for]:focus-within { outline: 3p
   .app-shell { padding: 28px 20px 60px; }
   .hero { align-items: flex-start; }
   .workspace { grid-template-columns: 1fr; }
-  .filters { position: static; }
+  .filters { position: static; max-height: none; overflow: visible; }
   .field-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .field-grid label { grid-template-columns: 1fr; }
 }

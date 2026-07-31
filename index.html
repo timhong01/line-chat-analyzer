@@ -47,36 +47,44 @@
           <button id="reset-filters" class="text-button" type="button">全部重設</button>
         </div>
 
-        <fieldset>
-          <legend>關鍵字</legend>
-          <label class="keyword-label" for="keyword-search">
-            <span class="visually-hidden">搜尋訊息內容</span>
-            <input id="keyword-search" type="search" placeholder="例如：報名、會議" autocomplete="off">
-          </label>
-          <p class="field-note">搜尋訊息內容，不區分英文字母大小寫。</p>
-        </fieldset>
-
-        <fieldset>
-          <legend>人物</legend>
-          <div id="people-filters" class="people-filters"></div>
-        </fieldset>
-
-        <fieldset>
-          <legend>日期區間</legend>
-          <div class="field-grid">
-            <label>開始日期<input id="date-from" type="date"></label>
-            <label>結束日期<input id="date-to" type="date"></label>
+        <details class="filter-section" open>
+          <summary>關鍵字</summary>
+          <div class="filter-content">
+            <label class="keyword-label" for="keyword-search">
+              <span class="visually-hidden">搜尋訊息內容</span>
+              <input id="keyword-search" type="search" placeholder="例如：報名、會議" autocomplete="off">
+            </label>
+            <p class="field-note">搜尋訊息內容，不區分英文字母大小寫。</p>
           </div>
-        </fieldset>
+        </details>
 
-        <fieldset>
-          <legend>每日時間區間</legend>
-          <div class="field-grid">
-            <label>開始時間<input id="time-from" type="time" value="00:00"></label>
-            <label>結束時間<input id="time-to" type="time" value="23:59"></label>
+        <details class="filter-section" open>
+          <summary>人物</summary>
+          <div class="filter-content">
+            <div id="people-filters" class="people-filters"></div>
           </div>
-          <p class="field-note">時間條件會套用到日期區間內的每一天。</p>
-        </fieldset>
+        </details>
+
+        <details class="filter-section" open>
+          <summary>日期區間</summary>
+          <div class="filter-content">
+            <div class="field-grid">
+              <label>開始日期<input id="date-from" type="date"></label>
+              <label>結束日期<input id="date-to" type="date"></label>
+            </div>
+          </div>
+        </details>
+
+        <details class="filter-section" open>
+          <summary>每日時間區間</summary>
+          <div class="filter-content">
+            <div class="field-grid">
+              <label>開始時間<input id="time-from" type="time" value="00:00"></label>
+              <label>結束時間<input id="time-to" type="time" value="23:59"></label>
+            </div>
+            <p class="field-note">時間條件會套用到日期區間內的每一天。</p>
+          </div>
+        </details>
       </aside>
 
       <section class="results" aria-live="polite">
