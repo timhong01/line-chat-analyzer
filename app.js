@@ -1,7 +1,8 @@
 (function () {
   "use strict";
 
-  const state = { messages: [], fileName: "", selectedPeople: new Set(), people: [], metric: "messages" };
+  const MESSAGE_PAGE_SIZE = 300;
+  const state = { messages: [], fileName: "", selectedPeople: new Set(), people: [], metric: "messages", visibleMessageLimit: MESSAGE_PAGE_SIZE };
   const elements = {
     fileInput: document.getElementById("file-input"),
     dropZone: document.getElementById("drop-zone"),
@@ -27,6 +28,9 @@
     timelineSvg: document.getElementById("timeline-svg"),
     metricButtons: document.querySelectorAll("[data-metric]"),
     messageList: document.getElementById("message-list"),
+    messagePagination: document.getElementById("message-pagination"),
+    messagePaginationStatus: document.getElementById("message-pagination-status"),
+    loadMoreMessages: document.getElementById("load-more-messages"),
     emptyState: document.getElementById("empty-state"),
     resetFilters: document.getElementById("reset-filters"),
     emptyReset: document.getElementById("empty-reset")
@@ -59,6 +63,7 @@
     }
 
     state.messages = messages;
+    state.visibleMessageLimit = MESSAGE_PAGE_SIZE;
     state.fileName = fileName;
     state.selectedPeople = new Set(messages.map((message) => message.sender));
     const peopleCounts = new Map();
@@ -94,6 +99,7 @@
     elements.peopleFilters.querySelectorAll("input").forEach((input) => {
       input.addEventListener("change", () => {
         input.checked ? state.selectedPeople.add(input.value) : state.selectedPeople.delete(input.value);
+        state.visibleMessageLimit = MESSAGE_PAGE_SIZE;
         renderMessages();
       });
     });
@@ -129,8 +135,11 @@
       : "沒有可複製的篩選結果。";
     renderTimelineChart(filtered);
 
+    const visibleMessages = filtered.slice(0, state.visibleMessageLimit);
+    elements.messagePagination.hidden = filtered.length <= state.visibleMessageLimit;
+    elements.messagePaginationStatus.textContent = `目前顯示 ${visibleMessages.length.toLocaleString("zh-TW")}／${filtered.length.toLocaleString("zh-TW")} 則`;
     let currentDate = "";
-    elements.messageList.innerHTML = filtered.map((message) => {
+    elements.messageList.innerHTML = visibleMessages.map((message) => {
       const dateHeader = message.date !== currentDate
         ? `<div class="date-divider"><span>${formatDate(message.date)}</span></div>`
         : "";
@@ -288,14 +297,20 @@
     const filtered = getFilteredMessages();
     if (!filtered.length) return;
 
-    elements.aiPrompt.value = window.LineChatParser.formatAISummaryPrompt(filtered);
-    elements.aiCopyStatus.textContent = `已準備 ${filtered.length.toLocaleString("zh-TW")} 則訊息。`;
+    elements.aiPrompt.value = "正在準備篩選內容…";
+    elements.aiCopyStatus.textContent = `正在整理 ${filtered.length.toLocaleString("zh-TW")} 則訊息…`;
+    elements.copyAIText.disabled = true;
     if (typeof elements.aiDialog.showModal === "function") {
       elements.aiDialog.showModal();
     } else {
       elements.aiDialog.setAttribute("open", "");
     }
-    selectPreparedPrompt();
+    setTimeout(() => {
+      elements.aiPrompt.value = window.LineChatParser.formatAISummaryPrompt(filtered);
+      elements.aiCopyStatus.textContent = `已準備 ${filtered.length.toLocaleString("zh-TW")} 則訊息。`;
+      elements.copyAIText.disabled = false;
+      selectPreparedPrompt();
+    }, 0);
   }
 
   function resetFilters() {
@@ -308,6 +323,7 @@
     elements.timeFrom.value = "00:00";
     elements.timeTo.value = "23:59";
     elements.keywordSearch.value = "";
+    state.visibleMessageLimit = MESSAGE_PAGE_SIZE;
     renderMessages();
   }
 
@@ -323,13 +339,23 @@
   elements.dropZone.addEventListener("drop", (event) => handleFile(event.dataTransfer.files[0]));
   elements.dropZone.addEventListener("click", () => elements.fileInput.click());
   [elements.dateFrom, elements.dateTo, elements.timeFrom, elements.timeTo]
-    .forEach((input) => input.addEventListener("change", renderMessages));
-  elements.keywordSearch.addEventListener("input", renderMessages);
+    .forEach((input) => input.addEventListener("change", () => {
+      state.visibleMessageLimit = MESSAGE_PAGE_SIZE;
+      renderMessages();
+    }));
+  elements.keywordSearch.addEventListener("input", () => {
+    state.visibleMessageLimit = MESSAGE_PAGE_SIZE;
+    renderMessages();
+  });
   elements.resetFilters.addEventListener("click", resetFilters);
   elements.emptyReset.addEventListener("click", resetFilters);
   elements.downloadText.addEventListener("click", downloadFilteredText);
   elements.openAISummary.addEventListener("click", prepareAISummary);
   elements.copyAIText.addEventListener("click", copyPreparedPrompt);
+  elements.loadMoreMessages.addEventListener("click", () => {
+    state.visibleMessageLimit += MESSAGE_PAGE_SIZE;
+    renderMessages();
+  });
   elements.metricButtons.forEach((button) => button.addEventListener("click", () => {
     state.metric = button.dataset.metric;
     elements.metricButtons.forEach((option) => option.setAttribute("aria-pressed", String(option === button)));

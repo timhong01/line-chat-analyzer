@@ -11,6 +11,11 @@
   function deriveSpeakerCandidates(lines) {
     const candidates = new Set();
     const bracketedCounts = new Map();
+    const prefixStats = new Map();
+
+    function stripRecallSuffix(value) {
+      return value.replace(/已收回訊息$/u, "").trim();
+    }
 
     lines.forEach((line) => {
       const match = line.match(MESSAGE_LINE);
@@ -28,17 +33,41 @@
       const bracketed = rest.match(/^(.{1,60}?[）)])(?=\s|已|收回|$)/u);
       if (bracketed) {
         const name = bracketed[1].trim();
-        bracketedCounts.set(name, (bracketedCounts.get(name) || 0) + 1);
+        if (name.includes("（") && name.split(/\s+/u).length <= 3) {
+          bracketedCounts.set(name, (bracketedCounts.get(name) || 0) + 1);
+        }
       }
 
       const added = rest.match(/已新增(.+?)至群組/u);
       if (added) {
         added[1].split(/[,，、]/u).map((name) => name.trim()).filter(Boolean).forEach((name) => candidates.add(name));
       }
+
+      if (!rest.includes("\t")) {
+        const parts = rest.split(/\s+/u);
+        const first = stripRecallSuffix(parts[0] || "");
+        const second = stripRecallSuffix(parts[1] || "");
+        if (first && !first.includes(":") && !/^[–—-]/u.test(first)) {
+          if (!prefixStats.has(first)) prefixStats.set(first, { count: 0, seconds: new Map() });
+          const stats = prefixStats.get(first);
+          stats.count += 1;
+          if (second) stats.seconds.set(second, (stats.seconds.get(second) || 0) + 1);
+        }
+      }
     });
 
     bracketedCounts.forEach((count, name) => {
       if (count >= 2) candidates.add(name);
+    });
+
+    prefixStats.forEach((stats, first) => {
+      if (stats.count < 2) return;
+      const dominantSecond = [...stats.seconds.entries()].sort((a, b) => b[1] - a[1])[0];
+      if (dominantSecond && dominantSecond[1] / stats.count >= 0.8) {
+        candidates.add(`${first} ${dominantSecond[0]}`);
+      } else {
+        candidates.add(first);
+      }
     });
 
     return [...candidates].sort((a, b) => b.length - a.length);
@@ -59,10 +88,8 @@
       return { sender, content: tail || "（系統訊息）" };
     }
 
-    const fallback = rest.match(/^(\S+(?:\s+\S+)?)(?:\s+)(.*)$/u);
-    return fallback
-      ? { sender: fallback[1], content: fallback[2].trim() }
-      : { sender: "系統訊息", content: rest };
+    if (rest === "已收回訊息") return { sender: "系統訊息", content: rest };
+    return null;
   }
 
   function parseLineChat(text) {
@@ -86,6 +113,10 @@
         const hour = String(messageMatch[1]).padStart(2, "0");
         const minute = messageMatch[2];
         const parsed = splitSenderAndContent(messageMatch[3].trim(), candidates);
+        if (!parsed) {
+          if (currentMessage) currentMessage.content += `\n${hour}:${minute} ${messageMatch[3].trim()}`;
+          return;
+        }
         currentMessage = {
           id: messages.length + 1,
           date: currentDate,
