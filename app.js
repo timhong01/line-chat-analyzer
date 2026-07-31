@@ -7,6 +7,7 @@
     dropZone: document.getElementById("drop-zone"),
     workspace: document.getElementById("workspace"),
     peopleFilters: document.getElementById("people-filters"),
+    keywordSearch: document.getElementById("keyword-search"),
     dateFrom: document.getElementById("date-from"),
     dateTo: document.getElementById("date-to"),
     timeFrom: document.getElementById("time-from"),
@@ -64,6 +65,7 @@
     elements.dateTo.value = dates.at(-1);
     elements.timeFrom.value = "00:00";
     elements.timeTo.value = "23:59";
+    elements.keywordSearch.value = "";
     elements.fileName.textContent = fileName;
     elements.dropZone.hidden = true;
     elements.workspace.hidden = false;
@@ -96,11 +98,13 @@
     const dateTo = elements.dateTo.value;
     const timeFrom = elements.timeFrom.value || "00:00";
     const timeTo = elements.timeTo.value || "23:59";
+    const keyword = elements.keywordSearch.value.trim().toLocaleLowerCase("zh-TW");
     return state.messages.filter((message) =>
       state.selectedPeople.has(message.sender) &&
       (!dateFrom || message.date >= dateFrom) &&
       (!dateTo || message.date <= dateTo) &&
-      message.time >= timeFrom && message.time <= timeTo
+      message.time >= timeFrom && message.time <= timeTo &&
+      (!keyword || message.content.toLocaleLowerCase("zh-TW").includes(keyword))
     );
   }
 
@@ -253,6 +257,7 @@
     elements.dateTo.value = dates.at(-1);
     elements.timeFrom.value = "00:00";
     elements.timeTo.value = "23:59";
+    elements.keywordSearch.value = "";
     renderMessages();
   }
 
@@ -269,6 +274,7 @@
   elements.dropZone.addEventListener("click", () => elements.fileInput.click());
   [elements.dateFrom, elements.dateTo, elements.timeFrom, elements.timeTo]
     .forEach((input) => input.addEventListener("change", renderMessages));
+  elements.keywordSearch.addEventListener("input", renderMessages);
   elements.resetFilters.addEventListener("click", resetFilters);
   elements.emptyReset.addEventListener("click", resetFilters);
   elements.downloadText.addEventListener("click", downloadFilteredText);

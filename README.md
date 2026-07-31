@@ -7,6 +7,7 @@ GitHub Pages 啟用後網址：[https://timhong01.github.io/line-chat-analyzer/]
 支援篩選：
 
 - 人物
+- 訊息內容關鍵字
 - 開始與結束日期
 - 每日開始與結束時間
 - 將目前篩選結果下載為 UTF-8 `.txt` 檔

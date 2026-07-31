@@ -48,6 +48,15 @@
         </div>
 
         <fieldset>
+          <legend>關鍵字</legend>
+          <label class="keyword-label" for="keyword-search">
+            <span class="visually-hidden">搜尋訊息內容</span>
+            <input id="keyword-search" type="search" placeholder="例如：報名、會議" autocomplete="off">
+          </label>
+          <p class="field-note">搜尋訊息內容，不區分英文字母大小寫。</p>
+        </fieldset>
+
+        <fieldset>
           <legend>人物</legend>
           <div id="people-filters" class="people-filters"></div>
         </fieldset>
@@ -98,7 +107,7 @@
           <div class="chart-scroll">
             <svg id="timeline-svg" class="timeline-svg" role="img" aria-label="每日訊息量堆疊直條圖"></svg>
           </div>
-          <p class="chart-note">字數統計不含空白與換行。圖表會套用目前的人物、日期與每日時間條件。</p>
+          <p class="chart-note">字數統計不含空白與換行。圖表會套用目前所有篩選條件。</p>
         </section>
         <div id="message-list" class="message-list"></div>
         <div id="empty-state" class="empty-state" hidden>
