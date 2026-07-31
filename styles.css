@@ -98,15 +98,15 @@ input:focus-visible, button:focus-visible, label[for]:focus-within { outline: 3p
 .result-range { margin: 3px 0 0; color: var(--muted); font-size: 13px; text-align: right; }
 .results-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 11px; }
 .results-buttons { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
-.chatgpt-button,
+.ai-summary-button,
 .download-button {
   display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border: 0;
   border-radius: 9px; background: var(--green); color: white; font-size: 13px; font-weight: 700;
 }
-.chatgpt-button { border: 1px solid var(--green); background: var(--card); color: var(--green-dark); }
-.chatgpt-button:hover { background: var(--green-soft); }
+.ai-summary-button { border: 1px solid var(--green); background: var(--card); color: var(--green-dark); }
+.ai-summary-button:hover { background: var(--green-soft); }
 .download-button:hover { background: var(--green-dark); }
-.chatgpt-button:disabled, .download-button:disabled { cursor: not-allowed; opacity: .45; }
+.ai-summary-button:disabled, .download-button:disabled { cursor: not-allowed; opacity: .45; }
 .ai-status { margin: 0; color: var(--muted); font-size: 11px; text-align: right; }
 .share-dialog { width: min(720px, calc(100% - 32px)); max-height: calc(100% - 32px); padding: 0; border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
 .share-dialog::backdrop { background: rgba(15, 28, 24, .52); }
@@ -118,8 +118,12 @@ input:focus-visible, button:focus-visible, label[for]:focus-within { outline: 3p
 .share-dialog textarea { width: 100%; min-height: 280px; resize: vertical; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #fbfcfa; color: var(--ink); font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .copy-status { min-height: 20px; margin: 8px 0 0; color: var(--green-dark); font-size: 12px; }
 .share-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 16px; }
-.chatgpt-link { display: inline-flex; align-items: center; padding: 10px 14px; border: 1px solid var(--green); border-radius: 9px; color: var(--green-dark); font-size: 13px; font-weight: 700; text-decoration: none; }
-.chatgpt-link:hover { background: var(--green-soft); }
+.platform-heading { margin: 20px 0 10px; font-size: 12px; font-weight: 700; }
+.ai-platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 8px; }
+.ai-platform-link { display: flex; flex-direction: column; gap: 2px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); text-decoration: none; }
+.ai-platform-link:hover { border-color: var(--green); background: var(--green-soft); }
+.ai-platform-link strong { font-size: 13px; }
+.ai-platform-link span { color: var(--muted); font-size: 11px; }
 .timeline-chart { padding: 24px 28px 18px; border-bottom: 1px solid var(--line); }
 .chart-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
 .chart-heading h3 { margin: 0 0 5px; font-size: 16px; }
@@ -173,7 +177,7 @@ input:focus-visible, button:focus-visible, label[for]:focus-within { outline: 3p
   .result-range { text-align: left; }
   .results-actions { width: 100%; align-items: flex-start; }
   .results-buttons { width: 100%; }
-  .chatgpt-button, .download-button { width: 100%; justify-content: center; }
+  .ai-summary-button, .download-button { width: 100%; justify-content: center; }
   .ai-status { text-align: left; }
   .share-dialog-content { padding: 20px; }
   .share-dialog textarea { min-height: 220px; }

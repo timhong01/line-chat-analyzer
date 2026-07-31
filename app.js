@@ -16,12 +16,12 @@
     resultCount: document.getElementById("result-count"),
     resultRange: document.getElementById("result-range"),
     downloadText: document.getElementById("download-text"),
-    openChatGPT: document.getElementById("open-chatgpt"),
+    openAISummary: document.getElementById("open-ai-summary"),
     aiStatus: document.getElementById("ai-status"),
-    chatGPTDialog: document.getElementById("chatgpt-dialog"),
-    chatGPTPrompt: document.getElementById("chatgpt-prompt"),
-    chatGPTCopyStatus: document.getElementById("chatgpt-copy-status"),
-    copyChatGPTText: document.getElementById("copy-chatgpt-text"),
+    aiDialog: document.getElementById("ai-dialog"),
+    aiPrompt: document.getElementById("ai-prompt"),
+    aiCopyStatus: document.getElementById("ai-copy-status"),
+    copyAIText: document.getElementById("copy-ai-text"),
     chartSummary: document.getElementById("chart-summary"),
     chartLegend: document.getElementById("chart-legend"),
     timelineSvg: document.getElementById("timeline-svg"),
@@ -123,9 +123,9 @@
     elements.emptyState.hidden = filtered.length > 0;
     elements.messageList.hidden = filtered.length === 0;
     elements.downloadText.disabled = filtered.length === 0;
-    elements.openChatGPT.disabled = filtered.length === 0;
+    elements.openAISummary.disabled = filtered.length === 0;
     elements.aiStatus.textContent = filtered.length
-      ? "先確認內容，再複製並開啟 ChatGPT。"
+      ? "先確認內容，再複製並選擇 AI 平台。"
       : "沒有可複製的篩選結果。";
     renderTimelineChart(filtered);
 
@@ -259,18 +259,18 @@
   }
 
   function selectPreparedPrompt() {
-    elements.chatGPTPrompt.focus();
-    elements.chatGPTPrompt.select();
-    elements.chatGPTPrompt.setSelectionRange(0, elements.chatGPTPrompt.value.length);
+    elements.aiPrompt.focus();
+    elements.aiPrompt.select();
+    elements.aiPrompt.setSelectionRange(0, elements.aiPrompt.value.length);
   }
 
   async function copyPreparedPrompt() {
-    const text = elements.chatGPTPrompt.value;
+    const text = elements.aiPrompt.value;
     selectPreparedPrompt();
     if (navigator.clipboard && window.isSecureContext) {
       try {
         await navigator.clipboard.writeText(text);
-        elements.chatGPTCopyStatus.textContent = "已複製。請開啟 ChatGPT 並按 Command + V。";
+        elements.aiCopyStatus.textContent = "已複製。請選擇 AI 平台並按 Command + V。";
         return true;
       } catch (_error) {
         // Continue with the visible textarea fallback.
@@ -278,22 +278,22 @@
     }
 
     const copied = document.execCommand("copy");
-    elements.chatGPTCopyStatus.textContent = copied
-      ? "已複製。請開啟 ChatGPT 並按 Command + V。"
+    elements.aiCopyStatus.textContent = copied
+      ? "已複製。請選擇 AI 平台並按 Command + V。"
       : "瀏覽器阻擋自動複製。文字已全選，請按 Command + C。";
     return copied;
   }
 
-  function prepareChatGPTShare() {
+  function prepareAISummary() {
     const filtered = getFilteredMessages();
     if (!filtered.length) return;
 
-    elements.chatGPTPrompt.value = window.LineChatParser.formatChatGPTPrompt(filtered);
-    elements.chatGPTCopyStatus.textContent = `已準備 ${filtered.length.toLocaleString("zh-TW")} 則訊息。`;
-    if (typeof elements.chatGPTDialog.showModal === "function") {
-      elements.chatGPTDialog.showModal();
+    elements.aiPrompt.value = window.LineChatParser.formatAISummaryPrompt(filtered);
+    elements.aiCopyStatus.textContent = `已準備 ${filtered.length.toLocaleString("zh-TW")} 則訊息。`;
+    if (typeof elements.aiDialog.showModal === "function") {
+      elements.aiDialog.showModal();
     } else {
-      elements.chatGPTDialog.setAttribute("open", "");
+      elements.aiDialog.setAttribute("open", "");
     }
     selectPreparedPrompt();
   }
@@ -328,8 +328,8 @@
   elements.resetFilters.addEventListener("click", resetFilters);
   elements.emptyReset.addEventListener("click", resetFilters);
   elements.downloadText.addEventListener("click", downloadFilteredText);
-  elements.openChatGPT.addEventListener("click", prepareChatGPTShare);
-  elements.copyChatGPTText.addEventListener("click", copyPreparedPrompt);
+  elements.openAISummary.addEventListener("click", prepareAISummary);
+  elements.copyAIText.addEventListener("click", copyPreparedPrompt);
   elements.metricButtons.forEach((button) => button.addEventListener("click", () => {
     state.metric = button.dataset.metric;
     elements.metricButtons.forEach((option) => option.setAttribute("aria-pressed", String(option === button)));

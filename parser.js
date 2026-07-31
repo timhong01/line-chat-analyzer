@@ -121,7 +121,7 @@
     return `${lines.join("\n")}\n`;
   }
 
-  function formatChatGPTPrompt(messages) {
+  function formatAISummaryPrompt(messages) {
     return `請分析以下 LINE 對話，並以繁體中文回答：
 
 1. 摘要主要議題與結論
@@ -135,7 +135,7 @@
 ${formatLineChat(messages)}--- 對話結束 ---`;
   }
 
-  const api = { parseLineChat, formatLineChat, formatChatGPTPrompt };
+  const api = { parseLineChat, formatLineChat, formatAISummaryPrompt };
   root.LineChatParser = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);

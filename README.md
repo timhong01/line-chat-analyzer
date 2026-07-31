@@ -14,7 +14,7 @@ GitHub Pages 啟用後網址：[https://timhong01.github.io/line-chat-analyzer/]
 | 對話檢視 | 依日期分組，保留時間、人物及多行訊息 |
 | 時間序列圖 | X 軸為日期，依人物堆疊；可切換訊息量與字數 |
 | TXT 匯出 | 下載目前所有篩選條件產生的 UTF-8 文字檔 |
-| ChatGPT 輔助 | 複製篩選內容與分析提示，並開啟 ChatGPT |
+| AI 輔助 | 複製篩選內容與分析提示，並選擇主流 AI 平台 |
 
 ## 使用方式
 
@@ -22,7 +22,7 @@ GitHub Pages 啟用後網址：[https://timhong01.github.io/line-chat-analyzer/]
 2. 開啟本工具，點選「匯入聊天記錄」或將檔案拖入頁面。
 3. 設定人物、關鍵字、日期與每日時間區間。
 4. 查看篩選後的訊息與每日堆疊圖。
-5. 選擇下載 TXT，或複製內容後交給 ChatGPT 分析。
+5. 選擇下載 TXT，或複製內容後交給 AI 平台分析。
 
 所有篩選條件會同步套用到：
 
@@ -30,19 +30,19 @@ GitHub Pages 啟用後網址：[https://timhong01.github.io/line-chat-analyzer/]
 - 訊息總數
 - 每日堆疊圖
 - TXT 下載內容
-- ChatGPT 複製內容
+- AI 總結複製內容
 
-## 複製內容＋開啟 ChatGPT
+## 讓 AI 幫我總結
 
-按下「準備給 ChatGPT」後，工具會：
+按下「讓 AI 幫我總結」後，工具會：
 
 1. 將目前篩選結果整理成文字。
 2. 加入摘要、待辦、未回覆問題、決策與風險的分析提示。
 3. 在畫面中顯示完整文字，讓使用者先確認。
 4. 使用者點「複製內容」。若瀏覽器阻擋剪貼簿，仍可在文字框按 `Command + C`。
-5. 使用者點「開啟 ChatGPT」，再按 `Command + V` 貼上。
+5. 使用者選擇 ChatGPT、Claude、Gemini、Microsoft Copilot 或 Perplexity，再按 `Command + V` 貼上。
 
-資料不會因為開啟 ChatGPT 而自動送出。使用者在 ChatGPT 貼上並送出後，資料才會傳送給 ChatGPT。
+資料不會因為開啟 AI 平台而自動送出。使用者貼上並送出後，資料才會傳送給所選平台。
 
 ## 隱私與資料流向
 
@@ -52,7 +52,7 @@ GitHub Pages 啟用後網址：[https://timhong01.github.io/line-chat-analyzer/]
 | 解析後訊息 | 目前瀏覽器記憶體 |
 | 篩選條件 | 目前瀏覽器記憶體 |
 | 匯出的 TXT | 使用者指定的下載位置 |
-| ChatGPT 內容 | 使用者貼上並送出後才傳送 |
+| AI 總結內容 | 使用者貼上並送出後才傳送給所選平台 |
 
 - 程式沒有聊天檔案上傳 API。
 - 程式不使用 `localStorage`、遠端資料庫或分析追蹤服務。
@@ -84,7 +84,7 @@ GitHub Pages 啟用後網址：[https://timhong01.github.io/line-chat-analyzer/]
 - 圖片、影片與貼圖只會依 LINE 匯出的文字標記顯示。
 - 不同語言、裝置或 LINE 版本可能產生不同匯出格式。
 - 人物辨識使用文字格式與重複名稱判斷；特殊名稱可能需要後續調整。
-- ChatGPT 網頁需要使用者自行貼上並送出內容。
+- AI 平台需要使用者自行貼上並送出內容。
 
 ## 本機執行
 
@@ -119,7 +119,7 @@ line-chat-analyzer/
 ├── index.html   # 介面與控制元件
 ├── styles.css   # 響應式版面與圖表樣式
 ├── parser.js    # LINE 記錄解析與文字輸出
-├── app.js       # 篩選、圖表、下載及 ChatGPT 操作
+├── app.js       # 篩選、圖表、下載及 AI 平台操作
 └── README.md
 ```
 
