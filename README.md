@@ -122,8 +122,15 @@ line-chat-analyzer/
 ├── styles.css   # 響應式版面與圖表樣式
 ├── parser.js    # LINE 記錄解析與文字輸出
 ├── app.js       # 篩選、圖表、下載及 AI 平台操作
+├── line-note-exporter/ # macOS LINE 社群筆記點擊匯出工具
 └── README.md
 ```
+
+## LINE 社群筆記批次備份
+
+`line-note-exporter/` 提供 macOS 本機點擊工具。首次校正 LINE 視窗座標後，可逐篇開啟筆記、複製文字並輸出 Markdown。匯出內容、執行紀錄及本機座標不會加入 Git。
+
+詳細操作請參考 [`line-note-exporter/README.md`](line-note-exporter/README.md)。
 
 ## 基本檢查
 

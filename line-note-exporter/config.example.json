@@ -1,0 +1,19 @@
+{
+  "app_name": "LINE",
+  "coordinates": {
+    "first_note": [500, 300],
+    "content": [900, 450],
+    "back": [650, 120]
+  },
+  "list": {
+    "row_step": 86,
+    "rows_per_page": 6,
+    "scroll_amount": -5
+  },
+  "timing_seconds": {
+    "open": 1.8,
+    "copy": 0.8,
+    "back": 0.8,
+    "scroll": 1.2
+  }
+}

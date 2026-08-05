@@ -9,3 +9,12 @@
 .env
 .env.*
 node_modules/
+__pycache__/
+*.py[cod]
+
+# LINE note exporter local state and captured private content
+line-note-exporter/config.json
+line-note-exporter/output/
+line-note-exporter/logs/
+line-note-exporter/.build/
+line-note-exporter/STOP
